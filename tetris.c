@@ -57,6 +57,7 @@ void rotate() {
         int k = 0;
         for (int j = b - 1; j >= 0; j--) {
             temp[j] = current.structure[i][k];
+            k++
         }
         for (int j = 0; j < b; j++) {
             current.structure[i][j] = temp[j];
