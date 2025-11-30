@@ -61,6 +61,7 @@ void change_direction(int ch);
 int main() {
     signal(SIGINT, handle_sigint);
     initialize();
+    int numb = rand() % 7;
     refresh();
     sleep(3);
     endwin();
@@ -108,7 +109,27 @@ void placeblock() {
 
 void assignblock () {
     for (int k = 0; k < 4; k++) {
-        strcpy(current.structure[k], regL.structure[k]);
+        if (numb == 0) {
+            strcpy(current.structure[k], cube.structure[k]);
+        }
+        else if (numb == 1) {
+            strcpy(current.structure[k], line.structure[k]);
+        }
+        else if (numb == 2) {
+            strcpy(current.structure[k], reverseL.structure[k]);
+        }
+        else if (numb == 3) {
+            strcpy(current.structure[k], regL.structure[k]);
+        }
+        else if (numb == 4) {
+            strcpy(current.structure[k], tee.structure[k]);
+        }
+        else if (numb == 5) {
+            strcpy(current.structure[k], regZ.structure[k]);
+        }
+        else if (numb == 6) {
+            strcpy(current.structure[k], reverseZ.structure[k]);
+        }
     }
 }
 
