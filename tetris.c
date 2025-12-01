@@ -125,7 +125,7 @@ static struct Template o = {.orientations = {{{0, 4, 4, 0},{0, 4, 4, 0},{0, 0, 0
 static struct Template s = {.orientations = {{{0, 5, 5, 0},{5, 5, 0, 0},{0, 0, 0, 0},{0, 0, 0, 0}},
     {{0, 5, 0, 0},{0, 5, 5, 0},{0, 0, 5, 0},{0, 0, 0, 0}},
     {{0, 0, 0, 0},{0, 5, 5, 0},{5, 5, 0, 0},{0, 0, 0, 0}},
-    {{5, 0, 0, 0},{5, 5, 0, 0},{5, 0, 0, 0},{0, 0, 0, 0}}},
+    {{5, 0, 0, 0},{5, 5, 0, 0},{0, 5, 0, 0},{0, 0, 0, 0}}},
 .startingColumn = 3,
 .wallKickData = &wallKickNonI,
 };
@@ -245,6 +245,7 @@ void tick() {
 }
 
 void checkCollisions() {
+    if (current.template == NULL) return; // No piece to check
     int colliding = 0;
     for (int r = 0; r < 4; r++) {
         for (int c = 0; c < 4; c++) {
@@ -270,6 +271,7 @@ void checkCollisions() {
 }
 
 void lock() {
+    if (current.template == NULL) return; // No piece to lock
     for (int r = 0; r < 4; r++) {
         for (int c = 0; c < 4; c++) {
             if (current.template->orientations[current.orientation][r][c] != 0) {
@@ -336,31 +338,31 @@ void rotate(int dir) { //1 for clockwise, -1 for counterclockwise
         int dy = (*current.template->wallKickData)[wallKickIndex][i][1];
 
         // Check if the piece can be placed at the new position
-        int invalid = 0;
+        int collision = 0;
         for (int r = 0; r < 4; r++) {
             for (int c = 0; c < 4; c++) {
                 if (current.template->orientations[potentialOrientation][r][c] != 0) {
                     int boardRow = dy + r + current.position[0];
                     int boardCol = dx + c + current.position[1];
                     if (boardRow < 0 || boardRow >= 22 || boardCol < 0 || boardCol >= 10 || board[boardRow][boardCol] != 0) {
-                        invalid = 1;
+                        collision = 1;
                         break;
                     }
                 }
             }
-            if (invalid) break;
+            if (collision) break;
         }
-
-        if (!invalid) {
+        
+        if (!collision) { // No collision, perform the rotation and translation
             current.orientation = potentialOrientation;
             current.position[0] += dy;
             current.position[1] += dx;
-
             checkCollisions();
             if (current.isColliding) {
                 current.lockDelayResets++;
                 current.contactCounter = 0;
             }
+            return; // Rotation successful
         }
     }
 }
