@@ -13,6 +13,7 @@
 
 
 //Nathan
+//Old block structure
 // struct Block {
 //     char structure[4][2];
 // };
@@ -243,6 +244,8 @@ void initialize() {
     nodelay(stdscr, TRUE); // Do not wait for key press
 }
 
+//Nathan
+//Exit game if win or lose
 void gameOver() {
     if (score >= 25) {
         mvprintw(12, 10, "You Win!");
@@ -260,6 +263,7 @@ void gameOver() {
     }
 }
 
+//Donald
 void tick() {
     if (current.template == NULL) {
         spawn();
@@ -282,6 +286,7 @@ void tick() {
     }
 }
 
+//Donald
 void checkCollisions() {
     if (current.template == NULL) return; // No piece to check
     int colliding = 0;
@@ -308,6 +313,7 @@ void checkCollisions() {
     }
 }
 
+//Donald
 void lock() {
     if (current.template == NULL) return; // No piece to lock
     for (int r = 0; r < 4; r++) {
@@ -338,6 +344,7 @@ void lock() {
 //     }
 // }
 
+//Donald
 void translate(int dir) { //-1 for left, 1 for right
     if (current.template == NULL) return; // No piece to translate
 
@@ -362,6 +369,7 @@ void translate(int dir) { //-1 for left, 1 for right
     }
 }
 
+//Donald
 void rotate(int dir) { //1 for clockwise, -1 for counterclockwise
     //SRS Standard: If rotation causes collision, translate piece according to wall kick data
     //Ex: Rotate 0 to R: Try rotating translated at (0,0). If collision, try (-1,0). If collision, try (-1,+1), etc.
@@ -407,6 +415,7 @@ void rotate(int dir) { //1 for clockwise, -1 for counterclockwise
     }
 }
 
+//Donald
 void randomize_bag() { //Tetris uses a "7-bag" randomizer to ensure uniform distribution of pieces
     for (int i = 0; i < 7; i++) {
         bag[i] = -1;
@@ -421,6 +430,7 @@ void randomize_bag() { //Tetris uses a "7-bag" randomizer to ensure uniform dist
     }
 }
 
+//Donald
 void spawn() {
     if (bagIndex == 7) randomize_bag();
     current.template = &templates[bag[bagIndex++]];
@@ -435,6 +445,7 @@ void spawn() {
 }
 
 // Nathan
+// Implementation for blocks
 // void placeblock() {
 //     for (int i = 0; i < 4; i++) {
 //         for (int j = 0; j < 2; j++) {
@@ -457,6 +468,7 @@ void spawn() {
 // }
 
 // Nathan
+// Assign blocks to current block
 // void assignblock () {
 //     for (int k = 0; k < 4; k++) {
 //         if (numb == 0) {
@@ -484,6 +496,7 @@ void spawn() {
 // }
 
 //Nathan
+//Exit game
 void handle_sigint(int sig) { // Print a message and exit cleanly
     endwin(); // End ncurses session
     printf("Game terminated\n");
@@ -492,6 +505,7 @@ void handle_sigint(int sig) { // Print a message and exit cleanly
 
 
 //Nathan
+//Clear lines whenever a line is made
 void clearlines() {
     for (int i = 0; i < 25; i++) {
         if (board[i][0] != 0 && board[i][1] != 0 && board[i][2] != 0 && board[i][3] != 0 && board[i][4] != 0 && board[i][5] != 0 && board[i][6] != 0 && board[i][7] != 0 && board[i][8] != 0 && board[i][9] != 0 ) {
