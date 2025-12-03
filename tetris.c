@@ -13,7 +13,6 @@
 
 
 //Nathan
-//Old block structure
 // struct Block {
 //     char structure[4][2];
 // };
@@ -244,8 +243,7 @@ void initialize() {
     nodelay(stdscr, TRUE); // Do not wait for key press
 }
 
-//Nathan
-//Exit game if win or lose
+//Donald
 void gameOver() {
     if (score >= 25) {
         mvprintw(12, 10, "You Win!");
@@ -335,6 +333,8 @@ void lock() {
     clearlines();
 }
 
+
+//Nathan
 // void rotate() {
 //     if (angle != 3) {
 //         angle++;
@@ -445,7 +445,6 @@ void spawn() {
 }
 
 // Nathan
-// Implementation for blocks
 // void placeblock() {
 //     for (int i = 0; i < 4; i++) {
 //         for (int j = 0; j < 2; j++) {
@@ -468,7 +467,6 @@ void spawn() {
 // }
 
 // Nathan
-// Assign blocks to current block
 // void assignblock () {
 //     for (int k = 0; k < 4; k++) {
 //         if (numb == 0) {
@@ -496,16 +494,15 @@ void spawn() {
 // }
 
 //Nathan
-//Exit game
 void handle_sigint(int sig) { // Print a message and exit cleanly
-    endwin(); // End ncurses session
+    endwin();
     printf("Game terminated\n");
-    exit(0); // Exit the program
+    exit(0);
 }
 
 
 //Nathan
-//Clear lines whenever a line is made
+//Function to clear all the full lines of the prpgram
 void clearlines() {
     for (int i = 0; i < 25; i++) {
         if (board[i][0] != 0 && board[i][1] != 0 && board[i][2] != 0 && board[i][3] != 0 && board[i][4] != 0 && board[i][5] != 0 && board[i][6] != 0 && board[i][7] != 0 && board[i][8] != 0 && board[i][9] != 0 ) {
@@ -516,6 +513,12 @@ void clearlines() {
                 }
             }
             i--;
+        }
+    }
+    //Qiuck pssible bug fix
+    for (int i = 22; i < 25; i++) {
+        for (int j = 0; i < 10; j++) {
+            board[i][j] = 0;
         }
     }
 }
