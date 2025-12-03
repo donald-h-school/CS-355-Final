@@ -179,7 +179,6 @@ struct Block current = {
 
 //Donald
 int frameLength = 16667; // in microseconds
-int level = 0;
 int softDrop = 0;
 int score = 0;
 
@@ -243,17 +242,17 @@ void initialize() {
     nodelay(stdscr, TRUE); // Do not wait for key press
 }
 
-//Donald
+//Nate
 void gameOver() {
     if (score >= 25) {
-        mvprintw(12, 10, "You Win!");
+        mvprintw(12, 25, "You Win!");
         sleep(5);
         endwin(); // End ncurses session
         printf("Game terminated\n");
         exit(0); // Exit the program
     }
-    if (board[20][0] != 0 && board[20][1] != 0 && board[20][2] != 0 && board[20][3] != 0 && board[20][4] != 0 && board[20][5] != 0 && board[20][6] != 0 && board[20][7] != 0 && board[20][8] != 0 && board[20][9] != 0 ) {
-        mvprintw(12, 10, "You Lose!");
+    if (board[2][0] != 0 || board[2][1] != 0 || board[2][2] != 0 || board[2][3] != 0 || board[2][4] != 0 || board[2][5] != 0 || board[2][6] != 0 || board[2][7] != 0 || board[2][8] != 0 || board[2][9] != 0 ) {
+        mvprintw(12, 25, "You Lose!");
         sleep(5);
         endwin(); // End ncurses session
         printf("Game terminated\n");
@@ -282,6 +281,8 @@ void tick() {
             current.position[0] += 1;
         }
     }
+
+    gameOver();
 }
 
 //Donald
@@ -584,5 +585,5 @@ double gravity[25] = {
 
 //Donald
 double getGravity() {
-    return softDrop || level > 24 ? 20 : gravity[level];
+    return softDrop || score > 24 ? 20 : gravity[score];
 }
