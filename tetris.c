@@ -11,6 +11,8 @@
 
 // TODO: Test rotations and wall kicks, implement gravity and locking, line clears, scoring, level progression, and rendering
 
+
+//Nathan
 // struct Block {
 //     char structure[4][2];
 // };
@@ -51,6 +53,7 @@
 //                                        {'x','O'},
 //                                        {'x','x'}}};
 
+//Donald
 static int wallKickNonI[8][5][2] = { // SRS Standard Wall Kick Data for non-I pieces
     {{0,0},{-1,0},{-1,1},{0,-2},{-1,-2}},
     {{0,0},{1,0},{1,-1},{0,2},{1,2}},
@@ -62,6 +65,7 @@ static int wallKickNonI[8][5][2] = { // SRS Standard Wall Kick Data for non-I pi
     {{0,0},{1,0},{1,1},{0,-2},{1,-2}},
 };
 
+//Donald
 static int wallKickI[8][5][2] = { // SRS Standard Wall Kick Data for I pieces
     {{0,0},{-2,0},{1,0},{-2,-1},{1,2}},
     {{0,0},{2,0},{-1,0},{+2,+1},{-1,-2}},
@@ -73,6 +77,7 @@ static int wallKickI[8][5][2] = { // SRS Standard Wall Kick Data for I pieces
     {{0,0},{-1,0},{2,0},{-1,2},{2,-1}},
 };
 
+//Donald
 struct Template { // Define the block templates with their orientations (4 sets of 4x4 matrices, one for each rotation)
     int orientations[4][4][4]; //Anchored at top-left corner
     //0 for empty, 1-7 for occupied (different numbers for different pieces for easier rendering)
@@ -80,6 +85,7 @@ struct Template { // Define the block templates with their orientations (4 sets 
     int (*wallKickData)[8][5][2]; // Wall kick data for this piece
 };
 
+//Donald
 struct Block {
     struct Template *template; // Pointer to the block's template
     int orientation; // 0-3 for the four rotation states
@@ -90,6 +96,7 @@ struct Block {
     int lockDelayResets; // Number of times lock delay has been reset
 };
 
+//Donald
 static struct Template i = {.orientations = {{{0, 0, 0, 0},{1, 1, 1, 1},{0, 0, 0, 0},{0, 0, 0, 0}},
     {{0, 0, 1, 0},{0, 0, 1, 0},{0, 0, 1, 0},{0, 0, 1, 0}},
     {{0, 0, 0, 0},{0, 0, 0, 0},{1, 1, 1, 1},{0, 0, 0, 0}},
@@ -98,6 +105,7 @@ static struct Template i = {.orientations = {{{0, 0, 0, 0},{1, 1, 1, 1},{0, 0, 0
 .wallKickData = &wallKickI,
 };
 
+//Donald
 static struct Template j = {.orientations = {{{2, 0, 0, 0},{2, 2, 2, 0},{0, 0, 0, 0},{0, 0, 0, 0}},
     {{0, 2, 2, 0},{0, 2, 0, 0},{0, 2, 0, 0},{0, 0, 0, 0}},
     {{0, 0, 0, 0},{2, 2, 2, 0},{0, 0, 2, 0},{0, 0, 0, 0}},
@@ -106,6 +114,7 @@ static struct Template j = {.orientations = {{{2, 0, 0, 0},{2, 2, 2, 0},{0, 0, 0
 .wallKickData = &wallKickNonI,
 };
 
+//Donald
 static struct Template l = {.orientations = {{{0, 0, 3, 0},{3, 3, 3, 0},{0, 0, 0, 0},{0, 0, 0, 0}},
     {{0, 3, 0, 0},{0, 3, 0, 0},{0, 3, 3, 0},{0, 0, 0, 0}},
     {{0, 0, 0, 0},{3, 3, 3, 0},{3, 0, 0, 0},{0, 0, 0, 0}},
@@ -114,6 +123,7 @@ static struct Template l = {.orientations = {{{0, 0, 3, 0},{3, 3, 3, 0},{0, 0, 0
 .wallKickData = &wallKickNonI,
 };
 
+//Donald
 static struct Template o = {.orientations = {{{0, 4, 4, 0},{0, 4, 4, 0},{0, 0, 0, 0},{0, 0, 0, 0}},
     {{0, 4, 4, 0},{0, 4, 4, 0},{0, 0, 0, 0},{0, 0, 0, 0}},
     {{0, 4, 4, 0},{0, 4, 4, 0},{0, 0, 0, 0},{0, 0, 0, 0}},
@@ -122,6 +132,7 @@ static struct Template o = {.orientations = {{{0, 4, 4, 0},{0, 4, 4, 0},{0, 0, 0
 .wallKickData = &wallKickNonI,
 };
 
+//Donald
 static struct Template s = {.orientations = {{{0, 5, 5, 0},{5, 5, 0, 0},{0, 0, 0, 0},{0, 0, 0, 0}},
     {{0, 5, 0, 0},{0, 5, 5, 0},{0, 0, 5, 0},{0, 0, 0, 0}},
     {{0, 0, 0, 0},{0, 5, 5, 0},{5, 5, 0, 0},{0, 0, 0, 0}},
@@ -130,6 +141,7 @@ static struct Template s = {.orientations = {{{0, 5, 5, 0},{5, 5, 0, 0},{0, 0, 0
 .wallKickData = &wallKickNonI,
 };
 
+//Donald
 static struct Template t = {.orientations = {{{0, 6, 0, 0},{6, 6, 6, 0},{0, 0, 0, 0},{0, 0, 0, 0}},
     {{0, 6, 0, 0},{0, 6, 6, 0},{0, 6, 0, 0},{0, 0, 0, 0}},
     {{0, 0, 0, 0},{6, 6, 6, 0},{0, 6, 0, 0},{0, 0, 0, 0}},
@@ -138,6 +150,7 @@ static struct Template t = {.orientations = {{{0, 6, 0, 0},{6, 6, 6, 0},{0, 0, 0
 .wallKickData = &wallKickNonI,
 };
 
+//Donald
 static struct Template z = {.orientations = {{{7, 7, 0, 0},{0, 7, 7, 0},{0, 0, 0, 0},{0, 0, 0, 0}},
     {{0, 0, 7, 0},{0, 7, 7, 0},{0, 7, 0, 0},{0, 0, 0, 0}},
     {{0, 0, 0, 0},{7, 7, 0, 0},{0, 7, 7, 0},{0, 0, 0, 0}},
@@ -146,11 +159,13 @@ static struct Template z = {.orientations = {{{7, 7, 0, 0},{0, 7, 7, 0},{0, 0, 0
 .wallKickData = &wallKickNonI,
 };
 
+//Donald
 struct Template templates[7]; // Array to hold all block templates
-int board[22][10] = {0}; // Extra 2 rows for spawn area
+int board[25][10] = {0}; // Extra 5 rows for spawn area
 int bag[7] = {-1,-1,-1,-1,-1,-1,-1}; // 7-bag randomizer
 int bagIndex = 0;
 
+//Donald
 struct Block current = {
     .template = NULL,
     .orientation = 0,
@@ -162,9 +177,11 @@ struct Block current = {
 // int LR = 5;
 // int numb;
 
+//Donald
 int frameLength = 16667; // in microseconds
 int level = 0;
 int softDrop = 0;
+int score = 0;
 
 void initialize();
 void handle_sigint(int sig);
@@ -180,7 +197,9 @@ void randomize_bag();
 double getGravity();
 void checkCollisions();
 void lock();
+void clearlines();
 
+//Donald
 int main() {
     signal(SIGINT, handle_sigint);
     initialize();
@@ -197,12 +216,14 @@ int main() {
         tick();
         refresh();
         render();
+        mvprintw(12, 25, "Score: %d", score);
         usleep(frameLength);
     }
     endwin();
     exit(0);
 }
 
+//Donald
 void initialize() {
     templates[0] = o;
     templates[1] = i;
@@ -220,6 +241,23 @@ void initialize() {
     curs_set(0); // Hide the blinking cursor
     keypad(stdscr, TRUE); // Enable arrow keys
     nodelay(stdscr, TRUE); // Do not wait for key press
+}
+
+void gameOver() {
+    if (score >= 25) {
+        mvprintw(12, 10, "You Win!");
+        sleep(5);
+        endwin(); // End ncurses session
+        printf("Game terminated\n");
+        exit(0); // Exit the program
+    }
+    if (board[20][0] != 0 && board[20][1] != 0 && board[20][2] != 0 && board[20][3] != 0 && board[20][4] != 0 && board[20][5] != 0 && board[20][6] != 0 && board[20][7] != 0 && board[20][8] != 0 && board[20][9] != 0 ) {
+        mvprintw(12, 10, "You Lose!");
+        sleep(5);
+        endwin(); // End ncurses session
+        printf("Game terminated\n");
+        exit(0); // Exit the program
+    }
 }
 
 void tick() {
@@ -287,6 +325,8 @@ void lock() {
     current.template = NULL;
     current.isColliding = 0;
     current.contactCounter = 0;
+    //adjust board
+    clearlines();
 }
 
 // void rotate() {
@@ -394,6 +434,7 @@ void spawn() {
     current.lockDelayResets = 0;
 }
 
+// Nathan
 // void placeblock() {
 //     for (int i = 0; i < 4; i++) {
 //         for (int j = 0; j < 2; j++) {
@@ -415,6 +456,7 @@ void spawn() {
 //     }
 // }
 
+// Nathan
 // void assignblock () {
 //     for (int k = 0; k < 4; k++) {
 //         if (numb == 0) {
@@ -441,12 +483,31 @@ void spawn() {
 //     }
 // }
 
+//Nathan
 void handle_sigint(int sig) { // Print a message and exit cleanly
     endwin(); // End ncurses session
     printf("Game terminated\n");
     exit(0); // Exit the program
 }
 
+
+//Nathan
+void clearlines() {
+    for (int i = 0; i < 25; i++) {
+        if (board[i][0] != 0 && board[i][1] != 0 && board[i][2] != 0 && board[i][3] != 0 && board[i][4] != 0 && board[i][5] != 0 && board[i][6] != 0 && board[i][7] != 0 && board[i][8] != 0 && board[i][9] != 0 ) {
+            score++;
+            for (int j = i; j >= 0; j--) {
+                for (int k = 0; k < 10; k++) {
+                    board[j][k] = board[j-1][k];
+                }
+            }
+            i--;
+        }
+    }
+}
+
+
+//Donald
 void ctrls(int ch) {
     if (current.lockDelayResets >= 15) return; // No inputs allowed after 15 lock delay resets
     else if (ch == 'x') {
@@ -466,6 +527,7 @@ void ctrls(int ch) {
     }
 }
 
+//Donald
 void render() {
     //Todo: add advanced rendering logic
     for (int r = 2; r < 22; r++) {
@@ -494,6 +556,7 @@ void render() {
     }
 }
 
+//Donald
 double gravity[25] = {
     0.01667, 0.021017, 0.026977, 0.035256, 0.04693,
     0.06361, 0.0879, 0.1236, 0.1774, 0.2598,
@@ -502,6 +565,7 @@ double gravity[25] = {
     2.36, 3.91, 6.14, 10, 16
 };
 
+//Donald
 double getGravity() {
     return softDrop || level > 24 ? 20 : gravity[level];
 }
